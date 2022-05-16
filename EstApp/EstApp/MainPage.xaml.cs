@@ -10,6 +10,7 @@ namespace EstApp
 {
     public partial class MainPage : ContentPage
     {
+        //dictionary
         public MainPage()
         {
             InitializeComponent();
