@@ -10,8 +10,6 @@ namespace EstApp
 {
     public partial class MainPage : ContentPage
     {
-        
-        //Hello
         public MainPage()
         {
             InitializeComponent();
