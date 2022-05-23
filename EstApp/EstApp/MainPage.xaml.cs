@@ -13,7 +13,6 @@ namespace EstApp
         public MainPage()
         {
             InitializeComponent();
-            //comment
         }
     }
 }
