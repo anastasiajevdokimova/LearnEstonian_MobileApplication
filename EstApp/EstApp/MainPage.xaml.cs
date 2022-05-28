@@ -13,8 +13,6 @@ namespace EstApp
         public MainPage()
         {
             InitializeComponent();
-
-            //hello world! from Anastasia
         }
     }
 }
