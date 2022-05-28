@@ -15,6 +15,7 @@ namespace EstApp
     public partial class GamePage : ContentPage
     {
         private Label textLabel;
+        private ImageButton img;
         public static DBRepository database;
         public ObservableCollection<Product> products { get; set; }
         public GamePage()
@@ -29,9 +30,14 @@ namespace EstApp
                 HorizontalOptions = LayoutOptions.CenterAndExpand
             };
 
+            img = new ImageButton
+            {
+                Source = database.Products[0].Image
+            };
+
             StackLayout st = new StackLayout
             {
-                Children = {textLabel}
+                Children = { textLabel, img }
             };
             Content = st;
         }
