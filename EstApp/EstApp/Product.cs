@@ -6,7 +6,7 @@ using System.Text;
 namespace EstApp
 {
     [Table("Words")]
-    public class DataBase
+    public class Product
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
@@ -14,6 +14,6 @@ namespace EstApp
         public string EngWord { get; set; }
         public string Image { get; set; }
         public string Category { get; set; }
-        public int Compl { get; set; }
+        public int Completed { get; set; }
     }
 }
