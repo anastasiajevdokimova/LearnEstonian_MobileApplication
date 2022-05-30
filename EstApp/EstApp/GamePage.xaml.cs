@@ -16,30 +16,40 @@ namespace EstApp
     {
         private Label textLabel;
         private ImageButton img;
+        private Button button1, button2;
         public static DBRepository database;
         public ObservableCollection<Product> products { get; set; }
         public GamePage()
         {
             InitializeComponent();
             database = App.Database;
-
+            var product = App.database.GetRamdomItem();
             textLabel = new Label
             {
-                Text = database.Products[0].EstWord.ToString(),
+                Text = product.EngWord.ToString(),
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.CenterAndExpand
             };
 
             img = new ImageButton
             {
-                Source = database.Products[0].Image
+                Source = product.Image
             };
+            button1 = new Button
+            {
+                Text = product.EstWord.ToString()
 
+            };
+            button1.Clicked += Button1_Clicked;
             StackLayout st = new StackLayout
             {
-                Children = { textLabel, img }
+                Children = { textLabel, img, button1 }
             };
             Content = st;
+        }
+        private void Button1_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
