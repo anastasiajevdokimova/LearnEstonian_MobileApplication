@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EstApp
@@ -10,7 +11,7 @@ namespace EstApp
         SQLiteConnection database;
 
         private List<Product> products;
-
+        Random random = new Random();
         public List<Product> Products
         {
             get
@@ -59,6 +60,11 @@ namespace EstApp
         public Product GetItem(int id)
         {
             return database.Get<Product>(id);
+        }
+        public Product GetRamdomItem()
+        {
+            int someRandomNumber = random.Next(0, products.Count());
+            return database.Get<Product>(someRandomNumber);
         }
 
     }
