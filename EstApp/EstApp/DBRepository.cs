@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace EstApp
 {
     public class DBRepository
     {
         SQLiteConnection database;
-
         private List<Product> products;
         Random random = new Random();
         public List<Product> Products
@@ -57,14 +55,24 @@ namespace EstApp
             return database.Table<Product>().ToList();
         }
 
+        public Product GetCategoryItems(string category)
+        {
+            return Products.Find(x => x.Category == category);
+        }
         public Product GetItem(int id)
         {
             return database.Get<Product>(id);
         }
         public Product GetRamdomItem()
         {
-            int someRandomNumber = random.Next(0, products.Count());
+            int someRandomNumber = random.Next(1, Products.Count());
             return database.Get<Product>(someRandomNumber);
+        }
+        public string GetRamdomString()
+        {
+            List<string> list = new List<string>{ "Melon", "Mustikas", "Viinamari", "Avacado", "Arbuus", "Paprika", "Kartul", "Porgand", "Lillkapsas", "Pippar" };
+            int someRandomNumber = random.Next(1, list.Count());
+            return list[someRandomNumber].ToString();
         }
 
     }
