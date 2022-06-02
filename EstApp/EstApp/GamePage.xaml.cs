@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -9,89 +10,159 @@ namespace EstApp
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GamePage : ContentPage
     {
-        Label textLabel;
-        Image img;
-        Button button1, button2;
+        Label productName;
+        Image productImage;
+        Button button1, button2, button3, button4;
+        private List<Button> buttonList;
+        private List<Product> quizProducts;
         ProgressBar progressBar;
         public static DBRepository database;
+        Product product;
         public ObservableCollection<Product> products { get; set; }
         public GamePage()
         {
             database = App.Database;
-            var product = App.database.GetRamdomItem();
-            progressBar = new ProgressBar
-            {
-                Progress = 0.0,
-                ProgressColor = Color.Orange
-            };
-            textLabel = new Label
+            quizProducts = new List<Product>(database.Products);
+            product = GetRandomProduct();
+
+            productName = new Label
             {
                 Text = product.EngWord.ToString(),
+                FontSize = 24,
+                FontAttributes = FontAttributes.Bold,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.CenterAndExpand
             };
 
-            img = new Image
+            productImage = new Image
             {
                 Source = product.Image,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
                 HeightRequest = 350,
                 WidthRequest = 350
             };
+
+            progressBar = new ProgressBar
+            {
+                Progress = 0.0,
+                ProgressColor = Color.Orange,
+            };
+
+            //buttons
             button1 = new Button
             {
-                Text = product.EstWord.ToString(),
-                BackgroundColor = Color.Gray
+                Text = " ",
+                BackgroundColor = Color.LightBlue
             };
             button2 = new Button
             {
-                Text = App.database.GetRamdomString().ToString(),
-                BackgroundColor = Color.Gray
+                Text = " ",
+                BackgroundColor = Color.LightBlue
             };
-            button1.Clicked += Button1_Clicked;
-            button2.Clicked += Button2_Clicked;
+            button3 = new Button
+            {
+                Text = " ",
+                BackgroundColor = Color.LightBlue
+            };
+            button4 = new Button
+            {
+                Text = " ",
+                BackgroundColor = Color.LightBlue
+            };
+            buttonList = new List<Button>{};
+            //Add buttons to list
+            buttonList.Add(button1);
+            buttonList.Add(button2);
+            buttonList.Add(button3);
+            buttonList.Add(button4);
+
+            button1.Clicked += CheckAnswer;
+            button2.Clicked += CheckAnswer;
+            button3.Clicked += CheckAnswer;
+            button4.Clicked += CheckAnswer;
+
             StackLayout st = new StackLayout
             {
-                Children = { textLabel, img, button1, button2, progressBar }
+                Children = { productName, productImage, progressBar, button1, button2, button3, button4}
             };
             Content = st;
-        }
-        private async void Button2_Clicked(object sender, EventArgs e)
-        {
-            button2.BackgroundColor = Color.Red;
-            var product = App.database.GetRamdomItem();
-            await Task.Delay(400);
-
-            textLabel.Text = product.EngWord.ToString();
-            img.Source = product.Image;
-            button1.Text = product.EstWord.ToString();
-            button2.Text = App.database.GetRamdomString().ToString();
-
-            button2.BackgroundColor = Color.Gray;
+            SetCorrectWord();
         }
 
-        private async void Button1_Clicked(object sender, EventArgs e)
+        private void SetCorrectWord()
         {
-            button1.BackgroundColor = Color.Green;
-            var product = App.database.GetRamdomItem();
+            string correctWord = product.EstWord;
+            Random rnd = new Random();
+            int randomButton = rnd.Next(0,3);
 
-            await Task.Delay(400);
+            buttonList[randomButton].Text = correctWord;
+            quizProducts.Remove(product);
 
-            textLabel.Text = product.EngWord.ToString();
-            img.Source = product.Image;
-            button1.Text = product.EstWord.ToString();
-            button2.Text = App.database.GetRamdomString().ToString();
-
-            button1.BackgroundColor = Color.Gray;
-
-            progressBar.Progress += 0.1;
-            if (progressBar.Progress > 0.9)
+            List<Product> tempProducts = new List<Product>(database.Products);
+            tempProducts.Remove(product);
+            foreach (Button b in buttonList)
             {
-                var ans = await DisplayAlert("Congratulations", "Game Over!", "OK", "NO");
-                if (ans == true)
+                if(b.Text != correctWord)
                 {
-                    progressBar.Progress = 0.0;
+                    int prodIndex = rnd.Next(0, tempProducts.Count-1);
+                    b.Text = tempProducts[prodIndex].EstWord;
+                    tempProducts.RemoveAt(prodIndex);
                 }
             }
+
+        }
+
+        private async void CheckAnswer(object sender, EventArgs e)
+        {
+            string s = (sender as Button).Text;
+            if (s == product.EstWord)
+            {
+                //correct
+                (sender as Button).BackgroundColor = Color.LightGreen;
+                progressBar.Progress += 0.1;
+                await Task.Delay(400);
+                if(progressBar.Progress >= 0.9)
+                {
+                    //game over
+                    await DisplayAlert("Congratulations", "Now you know a bit more!", "Play again");
+                    progressBar.Progress = 0.0;
+                    //NewGame
+                    quizProducts = new List<Product>(database.Products);
+                    SetNewQuestion();
+                }
+                else
+                {
+                    SetNewQuestion();
+                }
+            }
+            else
+            {
+                //incorrect
+                (sender as Button).BackgroundColor = Color.Crimson;
+            }
+        }
+
+        private void SetNewQuestion()
+        {
+            product = GetRandomProduct();
+            productName.Text = product.EngWord.ToString();
+            productImage.Source = product.Image;
+            foreach (Button b in buttonList)
+            {
+                b.BackgroundColor = Color.LightBlue;
+                b.Text = " ";
+            }
+            SetCorrectWord();
+
+        }
+
+        private Product GetRandomProduct()
+        {
+            Random rnd = new Random();
+            int index = rnd.Next(0, quizProducts.Count - 1);
+            product = quizProducts[index];
+            return product;
         }
     }
 }
