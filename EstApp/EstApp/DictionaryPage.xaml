@@ -3,11 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EstApp.DictionaryPage"
              Title="Dictionary">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Dictionary Page!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+    <StackLayout>
+        <Grid VerticalOptions="Center">
+            <Label x:Name="swLabel" HorizontalOptions="CenterAndExpand" FontSize="15" TextColor="Brown">Search in estonian</Label>
+            <Switch x:Name="swLanguage" IsToggled="false" Toggled="LanguageChange"/>
+        </Grid>
+        <Entry x:Name="searchBox" Placeholder="🔍 Search word..." Keyboard="Chat" TextChanged="SearchItem"></Entry>
+        <ListView x:Name="wordsList" ItemsSource="{Binding}" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ImageCell x:Name="img" ImageSource="{Binding Image}" Text="{Binding EstWord}" Detail="{Binding EngWord}" DetailColor="Black" TextColor="Black"></ImageCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>
