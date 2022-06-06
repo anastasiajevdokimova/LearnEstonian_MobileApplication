@@ -1,6 +1,6 @@
 # LearnEstonian_MobileApplication
 
-Mobile application for learning estonian words and phrases.
+Mobile application for learning estonian words.
 
 Developers - Anastasia Jevdokimova, Pavel Jemeljanov and Inga Lember students of Tallinna Tööstushariduskeskus - TARgv20 group.
 https://www.pivotaltracker.com/projects/2566496
