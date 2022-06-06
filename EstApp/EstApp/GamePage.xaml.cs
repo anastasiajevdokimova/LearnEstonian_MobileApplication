@@ -21,6 +21,8 @@ namespace EstApp
         public ObservableCollection<Product> products { get; set; }
         public GamePage()
         {
+            InitializeComponent();
+
             database = App.Database;
             quizProducts = new List<Product>(database.Products);
             product = GetRandomProduct();
