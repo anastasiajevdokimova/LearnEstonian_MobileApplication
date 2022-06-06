@@ -5,7 +5,7 @@
              Title="Dictionary">
     <StackLayout>
         <Grid VerticalOptions="Center">
-            <Label x:Name="swLabel" HorizontalOptions="CenterAndExpand" FontSize="15" TextColor="Brown">Search in estonian</Label>
+            <Label x:Name="swLabel" HorizontalOptions="CenterAndExpand" FontSize="15" TextColor="Brown">Search in english</Label>
             <Switch x:Name="swLanguage" IsToggled="false" Toggled="LanguageChange"/>
         </Grid>
         <Entry x:Name="searchBox" Placeholder="🔍 Search word..." Keyboard="Chat" TextChanged="SearchItem"></Entry>
